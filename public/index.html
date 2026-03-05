@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotizador Tapicería MA&VE</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8; --warm-white: #FDFAF5;
+    --brown-dark: #2C1A0E; --brown-mid: #5C3D1E; --brown-light: #8B5E3C;
+    --gold: #C9973A; --gold-light: #E8C580; --tan: #D4A96A; --rust: #A0522D;
+    --shadow: rgba(44,26,14,0.15); --border: rgba(92,61,30,0.2);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--brown-dark); min-height: 100vh; }
+
+  #loader {
+    position: fixed; inset: 0; background: var(--brown-dark);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9999; transition: opacity 0.4s;
+  }
+  #loader h2 { font-family:'Playfair Display',serif; color:var(--gold-light); font-size:1.6rem; margin-bottom:12px; }
+  #loader p  { color:var(--tan); font-size:0.85rem; }
+  .spinner { width:44px; height:44px; border:4px solid rgba(201,151,58,0.3); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom:18px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  #toast { position:fixed; bottom:28px; right:28px; padding:14px 22px; border-radius:10px; font-weight:600; font-size:0.9rem; opacity:0; pointer-events:none; transition:opacity 0.3s; z-index:9998; }
+  #toast.show { opacity:1; }
+  #toast.ok  { background:#2D6A2D; color:#fff; }
+  #toast.err { background:#8B1A1A; color:#fff; }
+
+  header { background:var(--brown-dark); color:var(--cream); padding:22px 36px; display:flex; align-items:center; justify-content:space-between; border-bottom:4px solid var(--gold); flex-wrap:wrap; gap:12px; }
+  header h1 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; color:var(--gold-light); }
+  header p  { font-size:0.78rem; color:var(--tan); letter-spacing:0.12em; text-transform:uppercase; }
+  .header-btns { display:flex; gap:10px; flex-wrap:wrap; }
+
+  .tabs { display:flex; background:var(--brown-mid); padding:0 36px; gap:4px; }
+  .tab { padding:12px 22px; color:var(--tan); font-weight:600; font-size:0.85rem; cursor:pointer; border-bottom:3px solid transparent; transition:all 0.2s; }
+  .tab:hover { color:var(--gold-light); }
+  .tab.active { color:var(--gold-light); border-bottom-color:var(--gold); }
+
+  main { max-width:1400px; margin:0 auto; padding:28px 20px; }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  .top-bar { background:var(--brown-mid); border-radius:12px; padding:16px 22px; margin-bottom:22px; display:flex; align-items:center; gap:14px; box-shadow:0 4px 20px var(--shadow); flex-wrap:wrap; }
+  .top-bar label { color:var(--gold-light); font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; white-space:nowrap; }
+  .top-bar select, .top-bar input { flex:1; min-width:150px; padding:8px 12px; border-radius:8px; border:2px solid var(--gold); background:var(--warm-white); color:var(--brown-dark); font-family:'DM Sans',sans-serif; font-size:0.92rem; outline:none; }
+
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px; }
+  @media(max-width:1100px) { .grid-4 { grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:600px)  { .grid-4 { grid-template-columns:1fr; } }
+
+  .panel { background:var(--warm-white); border-radius:14px; border:1.5px solid var(--border); overflow:hidden; box-shadow:0 2px 12px var(--shadow); display:flex; flex-direction:column; }
+  .panel-header { padding:11px 15px; font-family:'Playfair Display',serif; font-size:0.98rem; font-weight:700; color:var(--warm-white); }
+  .panel-header.mat  { background:var(--brown-mid); }
+  .panel-header.tela { background:#4A3728; }
+  .panel-header.mad  { background:#3D2B1F; }
+  .panel-header.esp  { background:var(--rust); }
+  .panel-body { padding:11px 9px; flex:1; }
+
+  .row-item { display:grid; grid-template-columns:1fr 48px 65px 65px 22px; gap:4px; align-items:center; padding:4px 0; border-bottom:1px dashed var(--border); }
+  .row-item:last-child { border-bottom:none; }
+  .row-tela { grid-template-columns:76px 1fr 48px 65px 65px 22px; }
+  .row-item input, .row-item select { padding:4px 6px; border:1.5px solid var(--border); border-radius:6px; font-family:'DM Sans',sans-serif; font-size:0.76rem; background:var(--cream); color:var(--brown-dark); width:100%; outline:none; }
+  .row-item input[readonly] { background:#EDE8DF; color:var(--brown-mid); cursor:default; }
+  .col-hdrs { display:grid; grid-template-columns:1fr 48px 65px 65px 22px; gap:4px; padding:0 0 4px; }
+  .col-hdrs.tela { grid-template-columns:76px 1fr 48px 65px 65px 22px; }
+  .col-hdr { font-size:0.65rem; font-weight:600; color:var(--brown-light); text-transform:uppercase; letter-spacing:0.06em; padding:0 5px; }
+  .total-row { display:flex; justify-content:space-between; align-items:center; margin-top:9px; padding:8px 9px; background:var(--brown-dark); border-radius:8px; color:var(--gold-light); }
+  .total-row span { font-family:'Playfair Display',serif; font-size:0.83rem; }
+  .total-row strong { font-size:0.97rem; }
+  .btn-del { background:none; border:none; color:#C0785A; font-size:0.95rem; cursor:pointer; padding:0; }
+  .btn-del:hover { color:var(--rust); }
+  .btn-add { display:flex; align-items:center; gap:5px; margin-top:8px; padding:6px 9px; background:transparent; border:1.5px dashed var(--gold); border-radius:7px; color:var(--gold); font-size:0.74rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-add:hover { background:var(--gold); color:var(--brown-dark); }
+
+  .resumen { background:var(--warm-white); border-radius:14px; border:1.5px solid var(--border); padding:22px 24px; box-shadow:0 4px 20px var(--shadow); }
+  .resumen h2 { font-family:'Playfair Display',serif; font-size:1.2rem; margin-bottom:15px; padding-bottom:10px; border-bottom:2px solid var(--gold); }
+  .resumen-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:11px; margin-bottom:16px; }
+  .resumen-item { background:var(--cream); border-radius:10px; padding:11px 15px; border-left:4px solid var(--gold); }
+  .resumen-item label { font-size:0.7rem; font-weight:600; color:var(--brown-light); text-transform:uppercase; letter-spacing:0.08em; }
+  .resumen-item .val { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; }
+  .adicionales { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:11px; margin-bottom:16px; padding-top:14px; border-top:1.5px dashed var(--border); }
+  .adicionales .field label { display:block; font-size:0.7rem; font-weight:600; color:var(--brown-light); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
+  .adicionales .field input { width:100%; padding:8px 11px; border:1.5px solid var(--border); border-radius:8px; background:var(--cream); font-family:'DM Sans',sans-serif; font-size:0.93rem; font-weight:600; outline:none; }
+  .subtotal-rows { display:flex; flex-direction:column; gap:6px; margin-bottom:11px; }
+  .sub-row { display:flex; justify-content:space-between; align-items:center; padding:7px 11px; border-radius:8px; background:var(--cream); }
+  .sub-row span { font-size:0.83rem; color:var(--brown-mid); font-weight:500; }
+  .sub-row strong { font-size:0.9rem; font-weight:700; }
+  .sub-row.highlight { background:#EEE4D4; }
+  .total-general { display:flex; justify-content:space-between; align-items:center; padding:15px 19px; background:var(--brown-dark); border-radius:12px; color:var(--gold-light); }
+  .total-general span { font-family:'Playfair Display',serif; font-size:1.02rem; }
+  .total-general strong { font-family:'Playfair Display',serif; font-size:1.65rem; }
+
+  .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border:none; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.86rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+  .btn-gold  { background:var(--gold); color:var(--brown-dark); }
+  .btn-gold:hover  { background:var(--gold-light); }
+  .btn-dark  { background:var(--brown-dark); color:var(--gold-light); }
+  .btn-dark:hover  { background:var(--brown-mid); }
+  .btn-green { background:#2D6A2D; color:#fff; }
+  .btn-green:hover { background:#3A8A3A; }
+  .btn-red   { background:#8B1A1A; color:#fff; }
+  .btn-red:hover   { background:#B02020; }
+  .btn-sm { padding:5px 11px; font-size:0.74rem; border-radius:6px; }
+
+  .hist-wrap { overflow-x:auto; }
+  .hist-table { width:100%; border-collapse:collapse; margin-top:14px; }
+  .hist-table th { background:var(--brown-dark); color:var(--gold-light); padding:10px 13px; text-align:left; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; }
+  .hist-table td { padding:10px 13px; border-bottom:1px solid var(--border); font-size:0.86rem; }
+  .hist-table tr:hover td { background:var(--cream); }
+  .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; }
+  .badge.borrador  { background:#E8DFC8; color:var(--brown-mid); }
+  .badge.enviada   { background:#C8D8E8; color:#1A3A5C; }
+  .badge.aprobada  { background:#C8E8C8; color:#1A4A1A; }
+  .badge.rechazada { background:#E8C8C8; color:#5C1A1A; }
+
+  @media print {
+    .tabs,.header-btns,.btn-add,.btn-del,#loader,#toast { display:none !important; }
+    body { background:white; }
+    main { padding:10px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="spinner"></div>
+  <h2>Cotizador MA&amp;VE</h2>
+  <p>Conectando con la base de datos...</p>
+</div>
+
+<div id="toast"></div>
+
+<header>
+  <div>
+    <h1>Cotizador Tapicería MA&amp;VE</h1>
+    <p>Sistema de cotización de muebles tapizados</p>
+  </div>
+  <div class="header-btns">
+    <button class="btn btn-green" onclick="App.guardar()">💾 Guardar cotización</button>
+    <button class="btn btn-gold"  onclick="window.print()">🖨️ Imprimir</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="App.showTab('nueva')">📋 Nueva Cotización</div>
+  <div class="tab"        onclick="App.showTab('historial')">📂 Historial</div>
+</div>
+
+<main>
+
+  <div id="tab-nueva" class="tab-content active">
+    <div class="top-bar">
+      <label>Tipo de Mueble:</label>
+      <select id="tipoMueble"></select>
+      <label>Cliente:</label>
+      <select id="clienteSelect"><option value="">— Sin cliente —</option></select>
+      <input type="text" id="nuevoCliente" placeholder="O escribe nombre de cliente nuevo...">
+    </div>
+
+    <div class="grid-4">
+      <div class="panel">
+        <div class="panel-header mat">🔩 Materiales</div>
+        <div class="panel-body">
+          <div class="col-hdrs">
+            <span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span>
+            <span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span>
+          </div>
+          <div id="rowsMat"></div>
+          <button class="btn-add" onclick="App.addRow('mat')">+ Agregar insumo</button>
+          <div class="total-row"><span>Total Materiales</span><strong id="totalMat">$0.00</strong></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header tela">🧵 Telas</div>
+        <div class="panel-body">
+          <div class="col-hdrs tela">
+            <span class="col-hdr">Tienda</span><span class="col-hdr">Tela</span>
+            <span class="col-hdr">Cant.</span><span class="col-hdr">Costo</span>
+            <span class="col-hdr">Total</span><span></span>
+          </div>
+          <div id="rowsTela"></div>
+          <button class="btn-add" onclick="App.addRow('tela')">+ Agregar tela</button>
+          <div class="total-row"><span>Total Telas</span><strong id="totalTela">$0.00</strong></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header mad">🪵 Madera</div>
+        <div class="panel-body">
+          <div class="col-hdrs">
+            <span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span>
+            <span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span>
+          </div>
+          <div id="rowsMad"></div>
+          <button class="btn-add" onclick="App.addRow('mad')">+ Agregar madera</button>
+          <div class="total-row"><span>Total Madera</span><strong id="totalMad">$0.00</strong></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header esp">🟫 Espuma</div>
+        <div class="panel-body">
+          <div class="col-hdrs">
+            <span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span>
+            <span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span>
+          </div>
+          <div id="rowsEsp"></div>
+          <button class="btn-add" onclick="App.addRow('esp')">+ Agregar espuma</button>
+          <div class="total-row"><span>Total Espuma</span><strong id="totalEsp">$0.00</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resumen">
+      <h2>Resumen de Cotización</h2>
+      <div class="resumen-grid">
+        <div class="resumen-item"><label>Materiales</label><div class="val" id="sumMat">$0.00</div></div>
+        <div class="resumen-item"><label>Telas</label><div class="val" id="sumTela">$0.00</div></div>
+        <div class="resumen-item"><label>Madera</label><div class="val" id="sumMad">$0.00</div></div>
+        <div class="resumen-item"><label>Espuma</label><div class="val" id="sumEsp">$0.00</div></div>
+      </div>
+      <div class="adicionales">
+        <div class="field"><label>Flete</label><input type="number" id="flete" value="400" min="0" oninput="App.recalc()"></div>
+        <div class="field"><label>Valor Agregado</label><input type="number" id="valorAgregado" value="200" min="0" oninput="App.recalc()"></div>
+        <div class="field"><label>Mano de Obra</label><input type="number" id="manoObra" value="2000" min="0" oninput="App.recalc()"></div>
+        <div class="field"><label>% Ganancia</label><input type="number" id="pctGanancia" value="30" min="0" max="100" oninput="App.recalc()"></div>
+      </div>
+      <div class="subtotal-rows">
+        <div class="sub-row"><span>Subtotal (Mat + Telas + Madera + Espuma)</span><strong id="subtotal1">$0.00</strong></div>
+        <div class="sub-row"><span>Subtotal (+ Flete + Valor Agregado + Mano de Obra)</span><strong id="subtotal2">$0.00</strong></div>
+        <div class="sub-row highlight"><span>Ganancia (<span id="pctLabel">30</span>%)</span><strong id="ganancia">$0.00</strong></div>
+      </div>
+      <div class="total-general">
+        <span>Total General</span>
+        <strong id="totalGeneral">$0.00</strong>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-historial" class="tab-content">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.25rem;">Cotizaciones Guardadas</h2>
+      <button class="btn btn-dark" onclick="App.cargarHistorial()">🔄 Actualizar</button>
+    </div>
+    <div id="historialContainer">
+      <p style="color:var(--brown-light);text-align:center;padding:40px;">Cargando...</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- Aquí se conecta el JS externo -->
+<script src="appm.js"></script>
+</body>
+</html>
