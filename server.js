@@ -149,6 +149,94 @@ app.delete('/api/cotizaciones/:id', async (req, res) => {
   res.json({ mensaje: 'Cotización eliminada' });
 });
 
+// ══════════════════════════════════════════════════════════════
+//  GESTIÓN DE CATÁLOGOS (Agregar / Editar / Eliminar productos)
+// ══════════════════════════════════════════════════════════════
+
+// ── INSUMOS ──────────────────────────────────────────────────
+app.post('/api/insumos', async (req, res) => {
+  const { nombre, precio } = req.body;
+  if (!nombre) return res.status(400).json({ error: 'Nombre requerido' });
+  const [r] = await pool.query('INSERT INTO insumos (nombre, precio) VALUES (?,?)', [nombre, precio||null]);
+  res.json({ id: r.insertId, mensaje: 'Insumo agregado' });
+});
+
+app.put('/api/insumos/:id', async (req, res) => {
+  const { nombre, precio } = req.body;
+  await pool.query('UPDATE insumos SET nombre=?, precio=? WHERE id=?', [nombre, precio||null, req.params.id]);
+  res.json({ mensaje: 'Insumo actualizado' });
+});
+
+app.delete('/api/insumos/:id', async (req, res) => {
+  await pool.query('UPDATE insumos SET activo=0 WHERE id=?', [req.params.id]);
+  res.json({ mensaje: 'Insumo eliminado' });
+});
+
+// ── TELAS ─────────────────────────────────────────────────────
+app.post('/api/telas', async (req, res) => {
+  const { tienda_id, nombre, precio } = req.body;
+  if (!tienda_id || !nombre) return res.status(400).json({ error: 'Tienda y nombre requeridos' });
+  const [r] = await pool.query('INSERT INTO telas (tienda_id, nombre, precio) VALUES (?,?,?)', [tienda_id, nombre, precio||null]);
+  res.json({ id: r.insertId, mensaje: 'Tela agregada' });
+});
+
+app.put('/api/telas/:id', async (req, res) => {
+  const { nombre, precio, tienda_id } = req.body;
+  await pool.query('UPDATE telas SET nombre=?, precio=?, tienda_id=? WHERE id=?', [nombre, precio||null, tienda_id, req.params.id]);
+  res.json({ mensaje: 'Tela actualizada' });
+});
+
+app.delete('/api/telas/:id', async (req, res) => {
+  await pool.query('UPDATE telas SET activo=0 WHERE id=?', [req.params.id]);
+  res.json({ mensaje: 'Tela eliminada' });
+});
+
+// ── MADERAS ───────────────────────────────────────────────────
+app.post('/api/maderas', async (req, res) => {
+  const { nombre, precio } = req.body;
+  if (!nombre) return res.status(400).json({ error: 'Nombre requerido' });
+  const [r] = await pool.query('INSERT INTO maderas (nombre, precio) VALUES (?,?)', [nombre, precio||null]);
+  res.json({ id: r.insertId, mensaje: 'Madera agregada' });
+});
+
+app.put('/api/maderas/:id', async (req, res) => {
+  const { nombre, precio } = req.body;
+  await pool.query('UPDATE maderas SET nombre=?, precio=? WHERE id=?', [nombre, precio||null, req.params.id]);
+  res.json({ mensaje: 'Madera actualizada' });
+});
+
+app.delete('/api/maderas/:id', async (req, res) => {
+  await pool.query('UPDATE maderas SET activo=0 WHERE id=?', [req.params.id]);
+  res.json({ mensaje: 'Madera eliminada' });
+});
+
+// ── ESPUMAS ───────────────────────────────────────────────────
+app.post('/api/espumas', async (req, res) => {
+  const { nombre, densidad, medida, precio } = req.body;
+  if (!nombre) return res.status(400).json({ error: 'Nombre requerido' });
+  const [r] = await pool.query('INSERT INTO espumas (nombre, densidad, medida, precio) VALUES (?,?,?,?)', [nombre, densidad||null, medida||null, precio||null]);
+  res.json({ id: r.insertId, mensaje: 'Espuma agregada' });
+});
+
+app.put('/api/espumas/:id', async (req, res) => {
+  const { nombre, densidad, medida, precio } = req.body;
+  await pool.query('UPDATE espumas SET nombre=?, densidad=?, medida=?, precio=? WHERE id=?', [nombre, densidad||null, medida||null, precio||null, req.params.id]);
+  res.json({ mensaje: 'Espuma actualizada' });
+});
+
+app.delete('/api/espumas/:id', async (req, res) => {
+  await pool.query('UPDATE espumas SET activo=0 WHERE id=?', [req.params.id]);
+  res.json({ mensaje: 'Espuma eliminada' });
+});
+
+// ── TIENDAS ───────────────────────────────────────────────────
+app.post('/api/tiendas', async (req, res) => {
+  const { nombre } = req.body;
+  if (!nombre) return res.status(400).json({ error: 'Nombre requerido' });
+  const [r] = await pool.query('INSERT INTO tiendas (nombre) VALUES (?)', [nombre]);
+  res.json({ id: r.insertId, mensaje: 'Tienda agregada' });
+});
+
 // ── INICIO ────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Servidor MYV corriendo en http://localhost:${PORT}`));
