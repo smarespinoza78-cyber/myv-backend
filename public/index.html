@@ -7,119 +7,142 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #F5F0E8; --warm-white: #FDFAF5;
-    --brown-dark: #2C1A0E; --brown-mid: #5C3D1E; --brown-light: #8B5E3C;
-    --gold: #C9973A; --gold-light: #E8C580; --tan: #D4A96A; --rust: #A0522D;
-    --shadow: rgba(44,26,14,0.15); --border: rgba(92,61,30,0.2);
+    --cream:#F5F0E8;--warm-white:#FDFAF5;--brown-dark:#2C1A0E;--brown-mid:#5C3D1E;
+    --brown-light:#8B5E3C;--gold:#C9973A;--gold-light:#E8C580;--tan:#D4A96A;
+    --rust:#A0522D;--shadow:rgba(44,26,14,0.15);--border:rgba(92,61,30,0.2);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--brown-dark); min-height: 100vh; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--brown-dark);min-height:100vh;}
 
-  #loader {
-    position: fixed; inset: 0; background: var(--brown-dark);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 9999; transition: opacity 0.4s;
-  }
-  #loader h2 { font-family:'Playfair Display',serif; color:var(--gold-light); font-size:1.6rem; margin-bottom:12px; }
-  #loader p  { color:var(--tan); font-size:0.85rem; }
-  .spinner { width:44px; height:44px; border:4px solid rgba(201,151,58,0.3); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin-bottom:18px; }
-  @keyframes spin { to { transform:rotate(360deg); } }
+  #loader{position:fixed;inset:0;background:var(--brown-dark);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.4s;}
+  #loader h2{font-family:'Playfair Display',serif;color:var(--gold-light);font-size:1.6rem;margin-bottom:12px;}
+  #loader p{color:var(--tan);font-size:0.85rem;}
+  .spinner{width:44px;height:44px;border:4px solid rgba(201,151,58,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:18px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
 
-  #toast { position:fixed; bottom:28px; right:28px; padding:14px 22px; border-radius:10px; font-weight:600; font-size:0.9rem; opacity:0; pointer-events:none; transition:opacity 0.3s; z-index:9998; }
-  #toast.show { opacity:1; }
-  #toast.ok  { background:#2D6A2D; color:#fff; }
-  #toast.err { background:#8B1A1A; color:#fff; }
+  #toast{position:fixed;bottom:28px;right:28px;padding:14px 22px;border-radius:10px;font-weight:600;font-size:0.9rem;opacity:0;pointer-events:none;transition:opacity 0.3s;z-index:9998;}
+  #toast.show{opacity:1;}
+  #toast.ok{background:#2D6A2D;color:#fff;}
+  #toast.err{background:#8B1A1A;color:#fff;}
 
-  header { background:var(--brown-dark); color:var(--cream); padding:22px 36px; display:flex; align-items:center; justify-content:space-between; border-bottom:4px solid var(--gold); flex-wrap:wrap; gap:12px; }
-  header h1 { font-family:'Playfair Display',serif; font-size:1.8rem; font-weight:900; color:var(--gold-light); }
-  header p  { font-size:0.78rem; color:var(--tan); letter-spacing:0.12em; text-transform:uppercase; }
-  .header-btns { display:flex; gap:10px; flex-wrap:wrap; }
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:8000;display:none;align-items:center;justify-content:center;}
+  .modal-bg.open{display:flex;}
+  .modal{background:var(--warm-white);border-radius:16px;padding:28px;width:90%;max-width:460px;box-shadow:0 8px 40px rgba(0,0,0,0.3);}
+  .modal h3{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:18px;color:var(--brown-mid);}
+  .modal .field{margin-bottom:14px;}
+  .modal .field label{display:block;font-size:0.76rem;font-weight:600;color:var(--brown-light);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+  .modal .field input,.modal .field select{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.92rem;background:var(--cream);outline:none;}
+  .modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
 
-  .tabs { display:flex; background:var(--brown-mid); padding:0 36px; gap:4px; }
-  .tab { padding:12px 22px; color:var(--tan); font-weight:600; font-size:0.85rem; cursor:pointer; border-bottom:3px solid transparent; transition:all 0.2s; }
-  .tab:hover { color:var(--gold-light); }
-  .tab.active { color:var(--gold-light); border-bottom-color:var(--gold); }
+  header{background:var(--brown-dark);color:var(--cream);padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:4px solid var(--gold);flex-wrap:wrap;gap:12px;}
+  header h1{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;color:var(--gold-light);}
+  header p{font-size:0.76rem;color:var(--tan);letter-spacing:0.12em;text-transform:uppercase;}
+  .header-btns{display:flex;gap:10px;flex-wrap:wrap;}
 
-  main { max-width:1400px; margin:0 auto; padding:28px 20px; }
-  .tab-content { display:none; }
-  .tab-content.active { display:block; }
+  .tabs{display:flex;background:var(--brown-mid);padding:0 32px;gap:4px;overflow-x:auto;}
+  .tab{padding:11px 20px;color:var(--tan);font-weight:600;font-size:0.83rem;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;white-space:nowrap;}
+  .tab:hover{color:var(--gold-light);}
+  .tab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
 
-  .top-bar { background:var(--brown-mid); border-radius:12px; padding:16px 22px; margin-bottom:22px; display:flex; align-items:center; gap:14px; box-shadow:0 4px 20px var(--shadow); flex-wrap:wrap; }
-  .top-bar label { color:var(--gold-light); font-family:'Playfair Display',serif; font-size:0.95rem; font-weight:700; white-space:nowrap; }
-  .top-bar select, .top-bar input { flex:1; min-width:150px; padding:8px 12px; border-radius:8px; border:2px solid var(--gold); background:var(--warm-white); color:var(--brown-dark); font-family:'DM Sans',sans-serif; font-size:0.92rem; outline:none; }
+  main{max-width:1400px;margin:0 auto;padding:24px 18px;}
+  .tab-content{display:none;}
+  .tab-content.active{display:block;}
 
-  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:22px; }
-  @media(max-width:1100px) { .grid-4 { grid-template-columns:repeat(2,1fr); } }
-  @media(max-width:600px)  { .grid-4 { grid-template-columns:1fr; } }
+  .top-bar{background:var(--brown-mid);border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 20px var(--shadow);flex-wrap:wrap;}
+  .top-bar label{color:var(--gold-light);font-family:'Playfair Display',serif;font-size:0.92rem;font-weight:700;white-space:nowrap;}
+  .top-bar select,.top-bar input{flex:1;min-width:140px;padding:7px 11px;border-radius:8px;border:2px solid var(--gold);background:var(--warm-white);color:var(--brown-dark);font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;}
 
-  .panel { background:var(--warm-white); border-radius:14px; border:1.5px solid var(--border); overflow:hidden; box-shadow:0 2px 12px var(--shadow); display:flex; flex-direction:column; }
-  .panel-header { padding:11px 15px; font-family:'Playfair Display',serif; font-size:0.98rem; font-weight:700; color:var(--warm-white); }
-  .panel-header.mat  { background:var(--brown-mid); }
-  .panel-header.tela { background:#4A3728; }
-  .panel-header.mad  { background:#3D2B1F; }
-  .panel-header.esp  { background:var(--rust); }
-  .panel-body { padding:11px 9px; flex:1; }
+  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  @media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:600px){.grid-4{grid-template-columns:1fr;}}
 
-  .row-item { display:grid; grid-template-columns:1fr 48px 65px 65px 22px; gap:4px; align-items:center; padding:4px 0; border-bottom:1px dashed var(--border); }
-  .row-item:last-child { border-bottom:none; }
-  .row-tela { grid-template-columns:76px 1fr 48px 65px 65px 22px; }
-  .row-item input, .row-item select { padding:4px 6px; border:1.5px solid var(--border); border-radius:6px; font-family:'DM Sans',sans-serif; font-size:0.76rem; background:var(--cream); color:var(--brown-dark); width:100%; outline:none; }
-  .row-item input[readonly] { background:#EDE8DF; color:var(--brown-mid); cursor:default; }
-  .col-hdrs { display:grid; grid-template-columns:1fr 48px 65px 65px 22px; gap:4px; padding:0 0 4px; }
-  .col-hdrs.tela { grid-template-columns:76px 1fr 48px 65px 65px 22px; }
-  .col-hdr { font-size:0.65rem; font-weight:600; color:var(--brown-light); text-transform:uppercase; letter-spacing:0.06em; padding:0 5px; }
-  .total-row { display:flex; justify-content:space-between; align-items:center; margin-top:9px; padding:8px 9px; background:var(--brown-dark); border-radius:8px; color:var(--gold-light); }
-  .total-row span { font-family:'Playfair Display',serif; font-size:0.83rem; }
-  .total-row strong { font-size:0.97rem; }
-  .btn-del { background:none; border:none; color:#C0785A; font-size:0.95rem; cursor:pointer; padding:0; }
-  .btn-del:hover { color:var(--rust); }
-  .btn-add { display:flex; align-items:center; gap:5px; margin-top:8px; padding:6px 9px; background:transparent; border:1.5px dashed var(--gold); border-radius:7px; color:var(--gold); font-size:0.74rem; font-weight:600; cursor:pointer; transition:all 0.2s; }
-  .btn-add:hover { background:var(--gold); color:var(--brown-dark); }
+  .panel{background:var(--warm-white);border-radius:14px;border:1.5px solid var(--border);overflow:hidden;box-shadow:0 2px 12px var(--shadow);display:flex;flex-direction:column;}
+  .panel-header{padding:10px 14px;font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:var(--warm-white);}
+  .panel-header.mat{background:var(--brown-mid);}
+  .panel-header.tela{background:#4A3728;}
+  .panel-header.mad{background:#3D2B1F;}
+  .panel-header.esp{background:var(--rust);}
+  .panel-body{padding:10px 8px;flex:1;}
 
-  .resumen { background:var(--warm-white); border-radius:14px; border:1.5px solid var(--border); padding:22px 24px; box-shadow:0 4px 20px var(--shadow); }
-  .resumen h2 { font-family:'Playfair Display',serif; font-size:1.2rem; margin-bottom:15px; padding-bottom:10px; border-bottom:2px solid var(--gold); }
-  .resumen-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:11px; margin-bottom:16px; }
-  .resumen-item { background:var(--cream); border-radius:10px; padding:11px 15px; border-left:4px solid var(--gold); }
-  .resumen-item label { font-size:0.7rem; font-weight:600; color:var(--brown-light); text-transform:uppercase; letter-spacing:0.08em; }
-  .resumen-item .val { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:700; }
-  .adicionales { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:11px; margin-bottom:16px; padding-top:14px; border-top:1.5px dashed var(--border); }
-  .adicionales .field label { display:block; font-size:0.7rem; font-weight:600; color:var(--brown-light); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
-  .adicionales .field input { width:100%; padding:8px 11px; border:1.5px solid var(--border); border-radius:8px; background:var(--cream); font-family:'DM Sans',sans-serif; font-size:0.93rem; font-weight:600; outline:none; }
-  .subtotal-rows { display:flex; flex-direction:column; gap:6px; margin-bottom:11px; }
-  .sub-row { display:flex; justify-content:space-between; align-items:center; padding:7px 11px; border-radius:8px; background:var(--cream); }
-  .sub-row span { font-size:0.83rem; color:var(--brown-mid); font-weight:500; }
-  .sub-row strong { font-size:0.9rem; font-weight:700; }
-  .sub-row.highlight { background:#EEE4D4; }
-  .total-general { display:flex; justify-content:space-between; align-items:center; padding:15px 19px; background:var(--brown-dark); border-radius:12px; color:var(--gold-light); }
-  .total-general span { font-family:'Playfair Display',serif; font-size:1.02rem; }
-  .total-general strong { font-family:'Playfair Display',serif; font-size:1.65rem; }
+  .row-item{display:grid;grid-template-columns:1fr 48px 65px 65px 22px;gap:4px;align-items:center;padding:3px 0;border-bottom:1px dashed var(--border);}
+  .row-item:last-child{border-bottom:none;}
+  .row-tela{grid-template-columns:76px 1fr 48px 65px 65px 22px;}
+  .row-item input,.row-item select{padding:4px 5px;border:1.5px solid var(--border);border-radius:6px;font-family:'DM Sans',sans-serif;font-size:0.74rem;background:var(--cream);color:var(--brown-dark);width:100%;outline:none;}
+  .row-item input[readonly]{background:#EDE8DF;color:var(--brown-mid);cursor:default;}
+  .col-hdrs{display:grid;grid-template-columns:1fr 48px 65px 65px 22px;gap:4px;padding:0 0 4px;}
+  .col-hdrs.tela{grid-template-columns:76px 1fr 48px 65px 65px 22px;}
+  .col-hdr{font-size:0.63rem;font-weight:600;color:var(--brown-light);text-transform:uppercase;letter-spacing:0.06em;padding:0 4px;}
+  .total-row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding:7px 8px;background:var(--brown-dark);border-radius:8px;color:var(--gold-light);}
+  .total-row span{font-family:'Playfair Display',serif;font-size:0.8rem;}
+  .total-row strong{font-size:0.94rem;}
+  .btn-del{background:none;border:none;color:#C0785A;font-size:0.9rem;cursor:pointer;padding:0;}
+  .btn-del:hover{color:var(--rust);}
+  .btn-add{display:flex;align-items:center;gap:5px;margin-top:7px;padding:5px 8px;background:transparent;border:1.5px dashed var(--gold);border-radius:7px;color:var(--gold);font-size:0.72rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+  .btn-add:hover{background:var(--gold);color:var(--brown-dark);}
 
-  .btn { display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border:none; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.86rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
-  .btn-gold  { background:var(--gold); color:var(--brown-dark); }
-  .btn-gold:hover  { background:var(--gold-light); }
-  .btn-dark  { background:var(--brown-dark); color:var(--gold-light); }
-  .btn-dark:hover  { background:var(--brown-mid); }
-  .btn-green { background:#2D6A2D; color:#fff; }
-  .btn-green:hover { background:#3A8A3A; }
-  .btn-red   { background:#8B1A1A; color:#fff; }
-  .btn-red:hover   { background:#B02020; }
-  .btn-sm { padding:5px 11px; font-size:0.74rem; border-radius:6px; }
+  .resumen{background:var(--warm-white);border-radius:14px;border:1.5px solid var(--border);padding:20px 22px;box-shadow:0 4px 20px var(--shadow);}
+  .resumen h2{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:14px;padding-bottom:9px;border-bottom:2px solid var(--gold);}
+  .resumen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px;}
+  .resumen-item{background:var(--cream);border-radius:10px;padding:10px 14px;border-left:4px solid var(--gold);}
+  .resumen-item label{font-size:0.68rem;font-weight:600;color:var(--brown-light);text-transform:uppercase;letter-spacing:0.08em;}
+  .resumen-item .val{font-family:'Playfair Display',serif;font-size:1.15rem;font-weight:700;}
+  .adicionales{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px;padding-top:12px;border-top:1.5px dashed var(--border);}
+  .adicionales .field label{display:block;font-size:0.68rem;font-weight:600;color:var(--brown-light);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;}
+  .adicionales .field input{width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--cream);font-family:'DM Sans',sans-serif;font-size:0.92rem;font-weight:600;outline:none;}
+  .subtotal-rows{display:flex;flex-direction:column;gap:5px;margin-bottom:10px;}
+  .sub-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:8px;background:var(--cream);}
+  .sub-row span{font-size:0.81rem;color:var(--brown-mid);font-weight:500;}
+  .sub-row strong{font-size:0.88rem;font-weight:700;}
+  .sub-row.highlight{background:#EEE4D4;}
+  .total-general{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:var(--brown-dark);border-radius:12px;color:var(--gold-light);}
+  .total-general span{font-family:'Playfair Display',serif;font-size:1rem;}
+  .total-general strong{font-family:'Playfair Display',serif;font-size:1.6rem;}
 
-  .hist-wrap { overflow-x:auto; }
-  .hist-table { width:100%; border-collapse:collapse; margin-top:14px; }
-  .hist-table th { background:var(--brown-dark); color:var(--gold-light); padding:10px 13px; text-align:left; font-size:0.78rem; letter-spacing:0.06em; text-transform:uppercase; }
-  .hist-table td { padding:10px 13px; border-bottom:1px solid var(--border); font-size:0.86rem; }
-  .hist-table tr:hover td { background:var(--cream); }
-  .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.7rem; font-weight:700; text-transform:uppercase; }
-  .badge.borrador  { background:#E8DFC8; color:var(--brown-mid); }
-  .badge.enviada   { background:#C8D8E8; color:#1A3A5C; }
-  .badge.aprobada  { background:#C8E8C8; color:#1A4A1A; }
-  .badge.rechazada { background:#E8C8C8; color:#5C1A1A; }
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.84rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+  .btn-gold{background:var(--gold);color:var(--brown-dark);}
+  .btn-gold:hover{background:var(--gold-light);}
+  .btn-dark{background:var(--brown-dark);color:var(--gold-light);}
+  .btn-dark:hover{background:var(--brown-mid);}
+  .btn-green{background:#2D6A2D;color:#fff;}
+  .btn-green:hover{background:#3A8A3A;}
+  .btn-red{background:#8B1A1A;color:#fff;}
+  .btn-red:hover{background:#B02020;}
+  .btn-sm{padding:4px 10px;font-size:0.72rem;border-radius:6px;}
 
-  @media print {
-    .tabs,.header-btns,.btn-add,.btn-del,#loader,#toast { display:none !important; }
-    body { background:white; }
-    main { padding:10px; }
+  .hist-wrap{overflow-x:auto;}
+  .hist-table{width:100%;border-collapse:collapse;margin-top:12px;}
+  .hist-table th{background:var(--brown-dark);color:var(--gold-light);padding:9px 12px;text-align:left;font-size:0.76rem;letter-spacing:0.06em;text-transform:uppercase;}
+  .hist-table td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:0.84rem;}
+  .hist-table tr:hover td{background:var(--cream);}
+  .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:0.68rem;font-weight:700;text-transform:uppercase;}
+  .badge.borrador{background:#E8DFC8;color:var(--brown-mid);}
+  .badge.enviada{background:#C8D8E8;color:#1A3A5C;}
+  .badge.aprobada{background:#C8E8C8;color:#1A4A1A;}
+  .badge.rechazada{background:#E8C8C8;color:#5C1A1A;}
+
+  /* CATÁLOGOS */
+  .cat-layout{display:grid;grid-template-columns:210px 1fr;gap:16px;}
+  @media(max-width:700px){.cat-layout{grid-template-columns:1fr;}}
+  .cat-menu{background:var(--warm-white);border-radius:14px;border:1.5px solid var(--border);overflow:hidden;box-shadow:0 2px 12px var(--shadow);height:fit-content;}
+  .cat-menu-item{padding:13px 16px;cursor:pointer;font-weight:600;font-size:0.86rem;border-left:4px solid transparent;transition:all 0.2s;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+  .cat-menu-item:last-child{border-bottom:none;}
+  .cat-menu-item:hover{background:var(--cream);}
+  .cat-menu-item.active{background:var(--cream);border-left-color:var(--gold);color:var(--brown-mid);}
+  .cat-panel{background:var(--warm-white);border-radius:14px;border:1.5px solid var(--border);padding:18px;box-shadow:0 2px 12px var(--shadow);}
+  .cat-panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:11px;border-bottom:2px solid var(--gold);}
+  .cat-panel-header h3{font-family:'Playfair Display',serif;font-size:1.05rem;}
+  .cat-search{width:100%;padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.86rem;background:var(--cream);outline:none;margin-bottom:12px;}
+  .cat-table{width:100%;border-collapse:collapse;}
+  .cat-table th{background:var(--brown-dark);color:var(--gold-light);padding:8px 11px;text-align:left;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;}
+  .cat-table td{padding:7px 11px;border-bottom:1px solid var(--border);font-size:0.82rem;}
+  .cat-table tr:hover td{background:var(--cream);}
+  .cat-table .actions{display:flex;gap:5px;}
+  .price-tag{background:var(--cream);border:1px solid var(--gold);border-radius:6px;padding:2px 8px;font-weight:700;font-size:0.78rem;color:var(--brown-mid);}
+  .no-price{color:#bbb;font-style:italic;font-size:0.74rem;}
+
+  @media print{
+    .tabs,.header-btns,.btn-add,.btn-del,#loader,#toast,.modal-bg{display:none!important;}
+    body{background:white;}main{padding:10px;}
   }
 </style>
 </head>
@@ -130,8 +153,19 @@
   <h2>Cotizador MA&amp;VE</h2>
   <p>Conectando con la base de datos...</p>
 </div>
-
 <div id="toast"></div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">Agregar producto</h3>
+    <div id="modalFields"></div>
+    <div class="modal-btns">
+      <button class="btn btn-dark" onclick="App.cerrarModal()">Cancelar</button>
+      <button class="btn btn-green" onclick="App.guardarModal()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
 
 <header>
   <div>
@@ -140,34 +174,36 @@
   </div>
   <div class="header-btns">
     <button class="btn btn-green" onclick="App.guardar()">💾 Guardar cotización</button>
-    <button class="btn btn-gold"  onclick="window.print()">🖨️ Imprimir</button>
+    <button class="btn btn-gold"  onclick="App.imprimirActual()">🖨️ Imprimir</button>
   </div>
 </header>
 
 <div class="tabs">
   <div class="tab active" onclick="App.showTab('nueva')">📋 Nueva Cotización</div>
   <div class="tab"        onclick="App.showTab('historial')">📂 Historial</div>
+  <div class="tab"        onclick="App.showTab('catalogo')">⚙️ Catálogos</div>
 </div>
 
 <main>
 
+  <!-- NUEVA COTIZACIÓN -->
   <div id="tab-nueva" class="tab-content active">
     <div class="top-bar">
       <label>Tipo de Mueble:</label>
       <select id="tipoMueble"></select>
+      <label>Cantidad:</label>
+      <input type="number" id="cantPiezas" value="1" min="1" style="max-width:70px;" oninput="App.recalc()">
       <label>Cliente:</label>
       <select id="clienteSelect"><option value="">— Sin cliente —</option></select>
-      <input type="text" id="nuevoCliente" placeholder="O escribe nombre de cliente nuevo...">
+      <input type="text" id="nuevoCliente" placeholder="Nombre nuevo cliente...">
+      <input type="text" id="nuevoTel" placeholder="Teléfono...">
+      <input type="text" id="nuevoDir" placeholder="Dirección...">
     </div>
-
     <div class="grid-4">
       <div class="panel">
         <div class="panel-header mat">🔩 Materiales</div>
         <div class="panel-body">
-          <div class="col-hdrs">
-            <span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span>
-            <span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span>
-          </div>
+          <div class="col-hdrs"><span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span><span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span></div>
           <div id="rowsMat"></div>
           <button class="btn-add" onclick="App.addRow('mat')">+ Agregar insumo</button>
           <div class="total-row"><span>Total Materiales</span><strong id="totalMat">$0.00</strong></div>
@@ -176,11 +212,7 @@
       <div class="panel">
         <div class="panel-header tela">🧵 Telas</div>
         <div class="panel-body">
-          <div class="col-hdrs tela">
-            <span class="col-hdr">Tienda</span><span class="col-hdr">Tela</span>
-            <span class="col-hdr">Cant.</span><span class="col-hdr">Costo</span>
-            <span class="col-hdr">Total</span><span></span>
-          </div>
+          <div class="col-hdrs tela"><span class="col-hdr">Tienda</span><span class="col-hdr">Tela</span><span class="col-hdr">Cant.</span><span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span></div>
           <div id="rowsTela"></div>
           <button class="btn-add" onclick="App.addRow('tela')">+ Agregar tela</button>
           <div class="total-row"><span>Total Telas</span><strong id="totalTela">$0.00</strong></div>
@@ -189,10 +221,7 @@
       <div class="panel">
         <div class="panel-header mad">🪵 Madera</div>
         <div class="panel-body">
-          <div class="col-hdrs">
-            <span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span>
-            <span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span>
-          </div>
+          <div class="col-hdrs"><span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span><span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span></div>
           <div id="rowsMad"></div>
           <button class="btn-add" onclick="App.addRow('mad')">+ Agregar madera</button>
           <div class="total-row"><span>Total Madera</span><strong id="totalMad">$0.00</strong></div>
@@ -201,17 +230,13 @@
       <div class="panel">
         <div class="panel-header esp">🟫 Espuma</div>
         <div class="panel-body">
-          <div class="col-hdrs">
-            <span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span>
-            <span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span>
-          </div>
+          <div class="col-hdrs"><span class="col-hdr">Descripción</span><span class="col-hdr">Cant.</span><span class="col-hdr">Costo</span><span class="col-hdr">Total</span><span></span></div>
           <div id="rowsEsp"></div>
           <button class="btn-add" onclick="App.addRow('esp')">+ Agregar espuma</button>
           <div class="total-row"><span>Total Espuma</span><strong id="totalEsp">$0.00</strong></div>
         </div>
       </div>
     </div>
-
     <div class="resumen">
       <h2>Resumen de Cotización</h2>
       <div class="resumen-grid">
@@ -225,32 +250,699 @@
         <div class="field"><label>Valor Agregado</label><input type="number" id="valorAgregado" value="200" min="0" oninput="App.recalc()"></div>
         <div class="field"><label>Mano de Obra</label><input type="number" id="manoObra" value="2000" min="0" oninput="App.recalc()"></div>
         <div class="field"><label>% Ganancia</label><input type="number" id="pctGanancia" value="30" min="0" max="100" oninput="App.recalc()"></div>
+        <div class="field"><label>Anticipo</label><input type="number" id="anticipo" value="0" min="0" oninput="App.recalc()"></div>
       </div>
       <div class="subtotal-rows">
         <div class="sub-row"><span>Subtotal (Mat + Telas + Madera + Espuma)</span><strong id="subtotal1">$0.00</strong></div>
         <div class="sub-row"><span>Subtotal (+ Flete + Valor Agregado + Mano de Obra)</span><strong id="subtotal2">$0.00</strong></div>
         <div class="sub-row highlight"><span>Ganancia (<span id="pctLabel">30</span>%)</span><strong id="ganancia">$0.00</strong></div>
+        <div class="sub-row"><span>Anticipo</span><strong id="anticipoLabel">$0.00</strong></div>
+        <div class="sub-row highlight"><span>Resto (Presupuesto - Anticipo)</span><strong id="restoLabel">$0.00</strong></div>
       </div>
-      <div class="total-general">
-        <span>Total General</span>
-        <strong id="totalGeneral">$0.00</strong>
-      </div>
+      <div class="total-general"><span>Total General</span><strong id="totalGeneral">$0.00</strong></div>
     </div>
   </div>
 
+  <!-- HISTORIAL -->
   <div id="tab-historial" class="tab-content">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <h2 style="font-family:'Playfair Display',serif;font-size:1.25rem;">Cotizaciones Guardadas</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.2rem;">Cotizaciones Guardadas</h2>
       <button class="btn btn-dark" onclick="App.cargarHistorial()">🔄 Actualizar</button>
     </div>
-    <div id="historialContainer">
-      <p style="color:var(--brown-light);text-align:center;padding:40px;">Cargando...</p>
+    <div id="historialContainer"><p style="color:var(--brown-light);text-align:center;padding:40px;">Cargando...</p></div>
+  </div>
+
+  <!-- CATÁLOGOS -->
+  <div id="tab-catalogo" class="tab-content">
+    <div class="cat-layout">
+      <div class="cat-menu">
+        <div class="cat-menu-item active" onclick="App.catMenu('insumos',this)">🔩 Materiales</div>
+        <div class="cat-menu-item" onclick="App.catMenu('telas',this)">🧵 Telas</div>
+        <div class="cat-menu-item" onclick="App.catMenu('maderas',this)">🪵 Maderas</div>
+        <div class="cat-menu-item" onclick="App.catMenu('espumas',this)">🟫 Espumas</div>
+      </div>
+      <div class="cat-panel">
+        <div class="cat-panel-header">
+          <h3 id="catTitulo">🔩 Materiales</h3>
+          <button class="btn btn-green btn-sm" onclick="App.abrirAgregar()">+ Agregar nuevo</button>
+        </div>
+        <input class="cat-search" id="catSearch" type="text" placeholder="Buscar producto..." oninput="App.filtrarCat()">
+        <div style="overflow-x:auto;">
+          <table class="cat-table">
+            <thead id="catThead"></thead>
+            <tbody id="catTbody"></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
 </main>
 
-<!-- Aquí se conecta el JS externo -->
-<script src="appm.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════
+//  app.js — Cotizador MA&VE
+//  index.html → app.js → Railway API → MySQL
+// ══════════════════════════════════════════════════════════════
+
+const API = 'https://myv-backend-production.up.railway.app/api';
+
+const DB = { tipos:[], tiendas:[], insumos:[], telas:[], maderas:[], espumas:[], clientes:[] };
+let rowsMat=[], rowsTela=[], rowsMad=[], rowsEsp=[];
+
+// Estado del catálogo activo
+let catActivo = 'insumos';
+let catDatos  = [];
+let modalModo = 'agregar'; // 'agregar' | 'editar'
+let modalItem = null;
+
+const fmt    = v => (v!=null&&!isNaN(v)) ? `$${Number(v).toFixed(2)}` : '—';
+const fmtNum = v => (v!=null&&!isNaN(v)) ? Number(v).toFixed(2) : '';
+const $      = id => document.getElementById(id);
+
+// ── TOAST ─────────────────────────────────────────────────────
+function toast(msg, tipo='ok') {
+  const t=$('toast'); t.textContent=msg; t.className=`show ${tipo}`;
+  setTimeout(()=>t.className='', 3500);
+}
+
+// ── LOADER ────────────────────────────────────────────────────
+function showLoader(v) {
+  const l=$('loader');
+  if(!v){ l.style.opacity='0'; setTimeout(()=>l.style.display='none',400); }
+  else  { l.style.display='flex'; l.style.opacity='1'; }
+}
+
+// ── TABS ──────────────────────────────────────────────────────
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  $(`tab-${name}`).classList.add('active');
+  const idx = ['nueva','historial','catalogo'].indexOf(name);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  if(name==='historial') cargarHistorial();
+  if(name==='catalogo')  renderCat();
+}
+
+// ── CARGA INICIAL ─────────────────────────────────────────────
+async function cargarDatos() {
+  try {
+    const [tipos,tiendas,insumos,telas,maderas,espumas,clientes] = await Promise.all([
+      fetch(`${API}/tipos-mueble`).then(r=>r.json()),
+      fetch(`${API}/tiendas`).then(r=>r.json()),
+      fetch(`${API}/insumos`).then(r=>r.json()),
+      fetch(`${API}/telas`).then(r=>r.json()),
+      fetch(`${API}/maderas`).then(r=>r.json()),
+      fetch(`${API}/espumas`).then(r=>r.json()),
+      fetch(`${API}/clientes`).then(r=>r.json()),
+    ]);
+    Object.assign(DB,{tipos,tiendas,insumos,telas,maderas,espumas,clientes});
+
+    $('tipoMueble').innerHTML = tipos.map(t=>`<option value="${t.id}">${t.nombre}</option>`).join('');
+    $('clienteSelect').innerHTML = '<option value="">— Sin cliente —</option>' +
+      clientes.map(c=>`<option value="${c.id}">${c.nombre}</option>`).join('');
+
+    rowsMat  = [{insumo_id:'',cant:1},{insumo_id:'',cant:1}];
+    rowsTela = [{tienda_id:'',tela_id:'',cant:1}];
+    rowsMad  = [{madera_id:'',cant:1}];
+    rowsEsp  = [{espuma_id:'',cant:1}];
+
+    renderAll(); recalc(); showLoader(false);
+
+  } catch(e) {
+    $('loader').innerHTML = `
+      <div style="text-align:center;padding:40px;">
+        <div style="font-size:3rem;margin-bottom:16px;">⚠️</div>
+        <h2 style="font-family:'Playfair Display',serif;color:#E8C580;margin-bottom:10px;">No se pudo conectar</h2>
+        <p style="color:#D4A96A;margin-bottom:16px;">Verifica que el servicio en Railway esté activo.</p>
+        <button onclick="location.reload()" style="padding:10px 22px;background:#C9973A;border:none;border-radius:8px;font-weight:700;cursor:pointer;color:#2C1A0E;">🔄 Reintentar</button>
+      </div>`;
+  }
+}
+
+// ── LOOKUPS ───────────────────────────────────────────────────
+const getPrecioInsumo = id => DB.insumos.find(i=>i.id==id)?.precio ?? null;
+const getPrecioTela   = id => DB.telas.find(t=>t.id==id)?.precio ?? null;
+const getPrecioMadera = id => DB.maderas.find(m=>m.id==id)?.precio ?? null;
+const getPrecioEspuma = id => DB.espumas.find(e=>e.id==id)?.precio ?? null;
+const getTelasPorTienda = tid => DB.telas.filter(t=>t.tienda_id==tid);
+
+// ── AGREGAR FILAS ─────────────────────────────────────────────
+function addRow(type) {
+  if(type==='mat')  { rowsMat.push({insumo_id:'',cant:1});             renderMat(); }
+  if(type==='tela') { rowsTela.push({tienda_id:'',tela_id:'',cant:1}); renderTela(); }
+  if(type==='mad')  { rowsMad.push({madera_id:'',cant:1});             renderMad(); }
+  if(type==='esp')  { rowsEsp.push({espuma_id:'',cant:1});             renderEsp(); }
+  recalc();
+}
+
+function renderAll() { renderMat(); renderTela(); renderMad(); renderEsp(); }
+
+// ── RENDER MATERIALES ─────────────────────────────────────────
+function renderMat() {
+  $('rowsMat').innerHTML = rowsMat.map((r,i) => {
+    const c=getPrecioInsumo(r.insumo_id), tot=(c!=null&&r.cant)?c*r.cant:null;
+    const opts=DB.insumos.map(ins=>`<option value="${ins.id}" ${ins.id==r.insumo_id?'selected':''}>${ins.nombre}${ins.precio?' ($'+ins.precio+')':''}</option>`).join('');
+    return `<div class="row-item">
+      <select onchange="rowsMat[${i}].insumo_id=this.value;renderMat();recalc()"><option value="">Seleccionar...</option>${opts}</select>
+      <input type="number" value="${r.cant||''}" min="0" step="0.01" onchange="rowsMat[${i}].cant=parseFloat(this.value)||0;renderMat();recalc()">
+      <input type="text" value="${fmtNum(c)}" readonly placeholder="—">
+      <input type="text" value="${fmtNum(tot)}" readonly placeholder="—">
+      <button class="btn-del" onclick="rowsMat.splice(${i},1);renderMat();recalc()">✕</button>
+    </div>`;
+  }).join('');
+  const tot=rowsMat.reduce((s,r)=>{const c=getPrecioInsumo(r.insumo_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  $('totalMat').textContent=$('sumMat').textContent=fmt(tot);
+}
+
+// ── RENDER TELAS ──────────────────────────────────────────────
+function renderTela() {
+  $('rowsTela').innerHTML = rowsTela.map((r,i) => {
+    const tFil=getTelasPorTienda(r.tienda_id);
+    const c=getPrecioTela(r.tela_id), tot=(c!=null&&r.cant)?c*r.cant:null;
+    const optsT=DB.tiendas.map(t=>`<option value="${t.id}" ${t.id==r.tienda_id?'selected':''}>${t.nombre}</option>`).join('');
+    const optsF=tFil.map(t=>`<option value="${t.id}" ${t.id==r.tela_id?'selected':''}>${t.nombre}${t.precio?' ($'+t.precio+')':''}</option>`).join('');
+    return `<div class="row-item row-tela">
+      <select onchange="rowsTela[${i}].tienda_id=this.value;rowsTela[${i}].tela_id='';renderTela();recalc()"><option value="">—</option>${optsT}</select>
+      <select onchange="rowsTela[${i}].tela_id=this.value;renderTela();recalc()"><option value="">Seleccionar...</option>${optsF}</select>
+      <input type="number" value="${r.cant||''}" min="0" step="0.01" onchange="rowsTela[${i}].cant=parseFloat(this.value)||0;renderTela();recalc()">
+      <input type="text" value="${fmtNum(c)}" readonly placeholder="—">
+      <input type="text" value="${fmtNum(tot)}" readonly placeholder="—">
+      <button class="btn-del" onclick="rowsTela.splice(${i},1);renderTela();recalc()">✕</button>
+    </div>`;
+  }).join('');
+  const tot=rowsTela.reduce((s,r)=>{const c=getPrecioTela(r.tela_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  $('totalTela').textContent=$('sumTela').textContent=fmt(tot);
+}
+
+// ── RENDER MADERA ─────────────────────────────────────────────
+function renderMad() {
+  $('rowsMad').innerHTML = rowsMad.map((r,i) => {
+    const c=getPrecioMadera(r.madera_id), tot=(c!=null&&r.cant)?c*r.cant:null;
+    const opts=DB.maderas.map(m=>`<option value="${m.id}" ${m.id==r.madera_id?'selected':''}>${m.nombre}${m.precio?' ($'+m.precio+')':''}</option>`).join('');
+    return `<div class="row-item">
+      <select onchange="rowsMad[${i}].madera_id=this.value;renderMad();recalc()"><option value="">Seleccionar...</option>${opts}</select>
+      <input type="number" value="${r.cant||''}" min="0" step="0.01" onchange="rowsMad[${i}].cant=parseFloat(this.value)||0;renderMad();recalc()">
+      <input type="text" value="${fmtNum(c)}" readonly placeholder="—">
+      <input type="text" value="${fmtNum(tot)}" readonly placeholder="—">
+      <button class="btn-del" onclick="rowsMad.splice(${i},1);renderMad();recalc()">✕</button>
+    </div>`;
+  }).join('');
+  const tot=rowsMad.reduce((s,r)=>{const c=getPrecioMadera(r.madera_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  $('totalMad').textContent=$('sumMad').textContent=fmt(tot);
+}
+
+// ── RENDER ESPUMA ─────────────────────────────────────────────
+function renderEsp() {
+  $('rowsEsp').innerHTML = rowsEsp.map((r,i) => {
+    const c=getPrecioEspuma(r.espuma_id), tot=(c!=null&&r.cant)?c*r.cant:null;
+    const opts=DB.espumas.map(e=>`<option value="${e.id}" ${e.id==r.espuma_id?'selected':''}>${e.nombre}${e.precio?' ($'+e.precio+')':''}</option>`).join('');
+    return `<div class="row-item">
+      <select onchange="rowsEsp[${i}].espuma_id=this.value;renderEsp();recalc()"><option value="">Seleccionar...</option>${opts}</select>
+      <input type="number" value="${r.cant||''}" min="0" step="0.01" onchange="rowsEsp[${i}].cant=parseFloat(this.value)||0;renderEsp();recalc()">
+      <input type="text" value="${fmtNum(c)}" readonly placeholder="—">
+      <input type="text" value="${fmtNum(tot)}" readonly placeholder="—">
+      <button class="btn-del" onclick="rowsEsp.splice(${i},1);renderEsp();recalc()">✕</button>
+    </div>`;
+  }).join('');
+  const tot=rowsEsp.reduce((s,r)=>{const c=getPrecioEspuma(r.espuma_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  $('totalEsp').textContent=$('sumEsp').textContent=fmt(tot);
+}
+
+// ── RECÁLCULO ─────────────────────────────────────────────────
+function recalc() {
+  const tMat  = rowsMat.reduce((s,r)=>{const c=getPrecioInsumo(r.insumo_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const tTela = rowsTela.reduce((s,r)=>{const c=getPrecioTela(r.tela_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const tMad  = rowsMad.reduce((s,r)=>{const c=getPrecioMadera(r.madera_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const tEsp  = rowsEsp.reduce((s,r)=>{const c=getPrecioEspuma(r.espuma_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const flete=parseFloat($('flete').value)||0;
+  const va=parseFloat($('valorAgregado').value)||0;
+  const mo=parseFloat($('manoObra').value)||0;
+  const pct=parseFloat($('pctGanancia').value)||30;
+  const cant=parseInt($('cantPiezas')?.value)||1;
+  const sub1=(tMat+tTela+tMad+tEsp)*cant;
+  const sub2=sub1+flete+va+mo;
+  const gan=sub2*(pct/100);
+  const anticipo=parseFloat($('anticipo')?.value)||0;
+  const resto=Math.max(0,(sub2+gan)-anticipo);
+  $('subtotal1').textContent=fmt(sub1);
+  $('subtotal2').textContent=fmt(sub2);
+  $('ganancia').textContent=fmt(gan);
+  $('totalGeneral').textContent=fmt(sub2+gan);
+  $('pctLabel').textContent=pct;
+  if($('anticipoLabel')) $('anticipoLabel').textContent=fmt(anticipo);
+  if($('restoLabel')) $('restoLabel').textContent=fmt(resto);
+  $('sumMat').textContent=$('totalMat').textContent=fmt(tMat);
+  $('sumTela').textContent=$('totalTela').textContent=fmt(tTela);
+  $('sumMad').textContent=$('totalMad').textContent=fmt(tMad);
+  $('sumEsp').textContent=$('totalEsp').textContent=fmt(tEsp);
+}
+
+// ── GUARDAR COTIZACIÓN ────────────────────────────────────────
+async function guardar() {
+  try {
+    let cliente_id=$('clienteSelect').value||null;
+    const nombreNuevo=$('nuevoCliente').value.trim();
+    const telNuevo=$('nuevoTel')?$('nuevoTel').value.trim():'';
+    const dirNuevo=$('nuevoDir')?$('nuevoDir').value.trim():'';
+    if(nombreNuevo) {
+      const r=await fetch(`${API}/clientes`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:nombreNuevo,telefono:telNuevo||null,direccion:dirNuevo||null})});
+      cliente_id=(await r.json()).id;
+    }
+    const tMat  = rowsMat.reduce((s,r)=>{const c=getPrecioInsumo(r.insumo_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+    const tTela = rowsTela.reduce((s,r)=>{const c=getPrecioTela(r.tela_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+    const tMad  = rowsMad.reduce((s,r)=>{const c=getPrecioMadera(r.madera_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+    const tEsp  = rowsEsp.reduce((s,r)=>{const c=getPrecioEspuma(r.espuma_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+    const payload = {
+      cliente_id, tipo_mueble_id:$('tipoMueble').value,
+      flete:parseFloat($('flete').value)||0,
+      valor_agregado:parseFloat($('valorAgregado').value)||0,
+      mano_obra:parseFloat($('manoObra').value)||0,
+      pct_ganancia:parseFloat($('pctGanancia').value)||30,
+      total_materiales:tMat, total_telas:tTela, total_madera:tMad, total_espuma:tEsp,
+      estatus:'borrador',
+      insumos: rowsMat.filter(r=>r.insumo_id).map(r=>({insumo_id:r.insumo_id,cantidad:r.cant,costo_unitario:getPrecioInsumo(r.insumo_id)||0})),
+      telas:   rowsTela.filter(r=>r.tela_id).map(r=>({tela_id:r.tela_id,cantidad:r.cant,costo_unitario:getPrecioTela(r.tela_id)||0})),
+      maderas: rowsMad.filter(r=>r.madera_id).map(r=>({madera_id:r.madera_id,cantidad:r.cant,costo_unitario:getPrecioMadera(r.madera_id)||0})),
+      espumas: rowsEsp.filter(r=>r.espuma_id).map(r=>({espuma_id:r.espuma_id,cantidad:r.cant,costo_unitario:getPrecioEspuma(r.espuma_id)||0})),
+    };
+    const res=await fetch(`${API}/cotizaciones`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await res.json();
+    if(data.id) { toast(`✅ Cotización #${data.id} guardada`,'ok'); $('nuevoCliente').value=''; $('nuevoTel').value=''; $('nuevoDir').value=''; verDetalle(data.id); }
+    else toast('❌ Error: '+(data.error||'desconocido'),'err');
+  } catch(e) { toast('❌ Error de conexión','err'); }
+}
+
+// ── HISTORIAL ─────────────────────────────────────────────────
+async function cargarHistorial() {
+  const cont=$('historialContainer');
+  cont.innerHTML='<p style="color:var(--brown-light);text-align:center;padding:40px;">Cargando...</p>';
+  try {
+    const data=await fetch(`${API}/cotizaciones`).then(r=>r.json());
+    if(!data.length){ cont.innerHTML='<p style="color:var(--brown-light);text-align:center;padding:40px;">No hay cotizaciones aún.</p>'; return; }
+    cont.innerHTML=`<div class="hist-wrap"><table class="hist-table">
+      <thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Mueble</th><th>Materiales</th><th>Telas</th><th>Madera</th><th>Espuma</th><th>Total</th><th>Estatus</th><th>Acciones</th></tr></thead>
+      <tbody>${data.map(c=>`<tr>
+        <td><strong>#${c.id}</strong></td>
+        <td>${new Date(c.fecha).toLocaleDateString('es-MX')}</td>
+        <td>${c.cliente||'—'}</td><td>${c.tipo_mueble}</td>
+        <td>${fmt(c.total_materiales)}</td><td>${fmt(c.total_telas)}</td>
+        <td>${fmt(c.total_madera)}</td><td>${fmt(c.total_espuma)}</td>
+        <td><strong>${fmt(c.total_general)}</strong></td>
+        <td><span class="badge ${c.estatus}">${c.estatus}</span></td>
+        <td style="display:flex;gap:5px;">
+          <button class="btn btn-dark btn-sm" onclick="verDetalle(${c.id})">👁️ Ver</button>
+          <button class="btn btn-red btn-sm"  onclick="eliminar(${c.id})">🗑️</button>
+        </td>
+      </tr>`).join('')}</tbody>
+    </table></div>`;
+  } catch(e){ cont.innerHTML='<p style="color:#C0785A;text-align:center;padding:40px;">❌ Error al cargar.</p>'; }
+}
+
+// ── VER DETALLE ───────────────────────────────────────────────
+async function verDetalle(id) {
+  try {
+    const c=await fetch(`${API}/cotizaciones/${id}`).then(r=>r.json());
+    const cli = DB.clientes.find(x=>x.id==c.cliente_id) || {};
+    const tel  = cli.telefono || '';
+    const dir  = cli.direccion || '';
+    const fecha = new Date(c.fecha).toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+    const total = Number(c.total_general).toFixed(2);
+    abrirRemision({cliente:c.cliente||'—',tel,dir,fecha,total,unitario:total,cant:1,tipo:c.tipo_mueble,id:c.id,anticipo:'0.00',resto:total});
+    return;
+    const win=window.open('','_blank','width=620,height=800');
+    win.document.write(`<!DOCTYPE html><html><head><title>Remisión #${c.id}</title>
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;}
+      body{font-family:Arial,sans-serif;background:#fff;color:#000;padding:20px 24px;font-size:12px;}
+      .top{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:10px;}
+      .logo-area{display:flex;align-items:center;gap:10px;}
+      .logo-icon{font-size:2.2rem;}
+      .empresa-nombre{font-size:1.15rem;font-weight:900;letter-spacing:0.04em;line-height:1.1;}
+      .empresa-nombre small{display:block;font-size:0.65rem;font-weight:400;letter-spacing:0.02em;}
+      .empresa-datos{font-size:0.65rem;line-height:1.6;margin-top:4px;}
+      .folio-box{border:2px solid #000;padding:6px 14px;text-align:center;min-width:110px;}
+      .folio-box .remision-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+      .folio-box .num{font-size:1.4rem;font-weight:900;color:#cc0000;}
+      .servicios{font-size:0.6rem;text-align:center;margin-top:6px;color:#333;border-top:1px solid #ccc;padding-top:4px;}
+      .campos{width:100%;border-collapse:collapse;margin-bottom:8px;}
+      .campos td{border:1px solid #000;padding:4px 7px;font-size:11px;}
+      .campos .lbl{background:#f0f0f0;font-weight:700;width:80px;}
+      table.items{width:100%;border-collapse:collapse;margin-bottom:10px;}
+      table.items th{background:#000;color:#fff;padding:5px 7px;font-size:11px;text-align:center;}
+      table.items td{border:1px solid #999;padding:5px 7px;font-size:11px;text-align:center;}
+      table.items td.desc{text-align:left;}
+      .empty-row td{height:22px;}
+      .totales{width:100%;border-collapse:collapse;margin-top:4px;}
+      .totales td{border:1px solid #000;padding:5px 10px;font-size:11px;}
+      .totales .lbl{background:#f0f0f0;font-weight:700;text-align:right;}
+      .totales .val{font-weight:700;text-align:right;min-width:90px;}
+      .firma{margin-top:24px;border-top:1px solid #000;padding-top:4px;font-size:10px;text-align:center;color:#555;}
+      .print-btn{display:block;margin:16px auto 0;padding:8px 24px;background:#000;color:#fff;border:none;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer;}
+      @media print{.print-btn{display:none;}body{padding:10px;}}
+    </style></head><body>
+
+    <div class="top">
+      <div>
+        <div class="logo-area">
+          <div class="logo-icon">🪑</div>
+          <div>
+            <div class="empresa-nombre">AUTOTAPICERIA MA &amp; VE<small>MARIA GENOVEVA GARCIA VARGAS</small></div>
+            <div class="empresa-datos">
+              RUIZ CORTINES No. 115 PTE. &nbsp;|&nbsp; COL. MITRAS NORTE MONTERREY, N.L. C.P. 64320<br>
+              TEL: 81 1104-2245 &nbsp;&nbsp; 81 3137-6085<br>
+              correo: tapizados.mave@gmail.com
+            </div>
+          </div>
+        </div>
+        <div class="servicios">MUEBLES DE OFICINA, SILLAS DE COMEDOR, DESCANSEY, SILLONES CARROS, CIELOS, ALFOMBRAS, ASIENTOS, TABLEROS-VINIL EXTERIOR</div>
+      </div>
+      <div>
+        <div class="folio-box">
+          <div class="remision-label">Remisión</div>
+          <div class="num">${String(c.id).padStart(4,'0')}</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="campos">
+      <tr>
+        <td class="lbl">FECHA</td><td colspan="3">${fecha}</td>
+      </tr>
+      <tr>
+        <td class="lbl">CLIENTE</td><td colspan="3">${c.cliente||''}</td>
+      </tr>
+      <tr>
+        <td class="lbl">DIRECCIÓN</td><td colspan="3">${dir}</td>
+      </tr>
+      <tr>
+        <td class="lbl">CIUDAD</td><td>Monterrey, N.L.</td>
+        <td class="lbl">TEL</td><td>${tel}</td>
+      </tr>
+    </table>
+
+    <table class="items">
+      <thead><tr><th style="width:50px">CANT.</th><th>DESCRIPCIÓN</th><th style="width:90px">P. UNITARIO</th><th style="width:90px">IMPORTE</th></tr></thead>
+      <tbody>
+        <tr><td></td><td class="desc">${c.tipo_mueble}</td><td>$${total}</td><td>$${total}</td></tr>
+        ${Array(8).fill('<tr class="empty-row"><td></td><td></td><td></td><td></td></tr>').join('')}
+      </tbody>
+    </table>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+      <tr><td style="border:1px solid #000;padding:4px 7px;font-size:10px;font-style:italic;color:#555;" colspan="4">CANTIDAD CON LETRA</td></tr>
+    </table>
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <div class="firma">_______________________________<br>FIRMA DE CONFORMIDAD</div>
+      <table class="totales" style="width:220px;">
+        <tr><td class="lbl">PRESUPUESTO</td><td class="val">$${total}</td></tr>
+        <tr><td class="lbl">ANTICIPO</td><td class="val">&nbsp;</td></tr>
+        <tr><td class="lbl">RESTO</td><td class="val">&nbsp;</td></tr>
+      </table>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+    </body></html>`);
+  } catch(e){ toast('❌ Error al cargar detalle','err'); }
+}
+
+async function eliminar(id) {
+  if(!confirm(`¿Eliminar cotización #${id}?`)) return;
+  try {
+    await fetch(`${API}/cotizaciones/${id}`,{method:'DELETE'});
+    toast(`🗑️ Cotización #${id} eliminada`,'ok');
+    cargarHistorial();
+  } catch(e){ toast('❌ Error al eliminar','err'); }
+}
+
+// ══════════════════════════════════════════════════════════════
+//  GESTIÓN DE CATÁLOGOS
+// ══════════════════════════════════════════════════════════════
+
+const catConfig = {
+  insumos: {
+    titulo: '🔩 Materiales / Insumos',
+    cols: ['Nombre','Precio','Acciones'],
+    render: item => `<td>${item.nombre}</td><td>${item.precio!=null?`<span class="price-tag">$${item.precio}</span>`:`<span class="no-price">Sin precio</span>`}</td>`,
+    campos: () => `
+      <div class="field"><label>Nombre del insumo</label><input id="mNombre" placeholder="Ej: Pegamento" value="${modalItem?.nombre||''}"></div>
+      <div class="field"><label>Precio ($)</label><input id="mPrecio" type="number" min="0" step="0.01" placeholder="Ej: 100" value="${modalItem?.precio||''}"></div>`,
+    payload: () => ({ nombre:$('mNombre').value.trim(), precio:parseFloat($('mPrecio').value)||null }),
+    reload: async () => { DB.insumos=await fetch(`${API}/insumos`).then(r=>r.json()); return DB.insumos; }
+  },
+  telas: {
+    titulo: '🧵 Telas',
+    cols: ['Tienda','Nombre','Precio','Acciones'],
+    render: item => `<td>${DB.tiendas.find(t=>t.id==item.tienda_id)?.nombre||item.tienda||'—'}</td><td>${item.nombre}</td><td>${item.precio!=null?`<span class="price-tag">$${item.precio}</span>`:`<span class="no-price">Sin precio</span>`}</td>`,
+    campos: () => `
+      <div class="field"><label>Tienda</label>
+        <select id="mTienda">${DB.tiendas.map(t=>`<option value="${t.id}" ${t.id==modalItem?.tienda_id?'selected':''}>${t.nombre}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Nombre de la tela</label><input id="mNombre" placeholder="Ej: Oslo Chocolate" value="${modalItem?.nombre||''}"></div>
+      <div class="field"><label>Precio ($)</label><input id="mPrecio" type="number" min="0" step="0.01" placeholder="Ej: 91" value="${modalItem?.precio||''}"></div>`,
+    payload: () => ({ tienda_id:$('mTienda').value, nombre:$('mNombre').value.trim(), precio:parseFloat($('mPrecio').value)||null }),
+    reload: async () => { DB.telas=await fetch(`${API}/telas`).then(r=>r.json()); return DB.telas; }
+  },
+  maderas: {
+    titulo: '🪵 Maderas',
+    cols: ['Nombre','Precio','Acciones'],
+    render: item => `<td>${item.nombre}</td><td>${item.precio!=null?`<span class="price-tag">$${item.precio}</span>`:`<span class="no-price">Sin precio</span>`}</td>`,
+    campos: () => `
+      <div class="field"><label>Nombre de la madera</label><input id="mNombre" placeholder="Ej: Triplay 12mm" value="${modalItem?.nombre||''}"></div>
+      <div class="field"><label>Precio ($)</label><input id="mPrecio" type="number" min="0" step="0.01" placeholder="Ej: 500" value="${modalItem?.precio||''}"></div>`,
+    payload: () => ({ nombre:$('mNombre').value.trim(), precio:parseFloat($('mPrecio').value)||null }),
+    reload: async () => { DB.maderas=await fetch(`${API}/maderas`).then(r=>r.json()); return DB.maderas; }
+  },
+  espumas: {
+    titulo: '🟫 Espumas',
+    cols: ['Nombre','Densidad','Medida','Precio','Acciones'],
+    render: item => `<td>${item.nombre}</td><td>${item.densidad||'—'}</td><td>${item.medida||'—'}</td><td>${item.precio!=null?`<span class="price-tag">$${item.precio}</span>`:`<span class="no-price">Sin precio</span>`}</td>`,
+    campos: () => `
+      <div class="field"><label>Nombre</label><input id="mNombre" placeholder="Ej: Densidad 20 5 cm" value="${modalItem?.nombre||''}"></div>
+      <div class="field"><label>Densidad</label><input id="mDensidad" type="number" placeholder="Ej: 20" value="${modalItem?.densidad||''}"></div>
+      <div class="field"><label>Medida</label><input id="mMedida" placeholder="Ej: 5 cm" value="${modalItem?.medida||''}"></div>
+      <div class="field"><label>Precio ($)</label><input id="mPrecio" type="number" min="0" step="0.01" placeholder="Ej: 270" value="${modalItem?.precio||''}"></div>`,
+    payload: () => ({ nombre:$('mNombre').value.trim(), densidad:parseInt($('mDensidad').value)||null, medida:$('mMedida').value.trim()||null, precio:parseFloat($('mPrecio').value)||null }),
+    reload: async () => { DB.espumas=await fetch(`${API}/espumas`).then(r=>r.json()); return DB.espumas; }
+  }
+};
+
+// Cambiar sección del catálogo
+function catMenu(tipo, el) {
+  document.querySelectorAll('.cat-menu-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  catActivo = tipo;
+  $('catSearch').value = '';
+  renderCat();
+}
+
+// Renderizar tabla del catálogo
+async function renderCat() {
+  const cfg = catConfig[catActivo];
+  $('catTitulo').textContent = cfg.titulo;
+  $('catThead').innerHTML = `<tr>${cfg.cols.map(c=>`<th>${c}</th>`).join('')}</tr>`;
+  $('catTbody').innerHTML = `<tr><td colspan="${cfg.cols.length}" style="text-align:center;padding:20px;color:var(--brown-light);">Cargando...</td></tr>`;
+  catDatos = await cfg.reload();
+  mostrarCat(catDatos);
+}
+
+function mostrarCat(datos) {
+  const cfg = catConfig[catActivo];
+  if(!datos.length) {
+    $('catTbody').innerHTML = `<tr><td colspan="${cfg.cols.length}" style="text-align:center;padding:20px;color:var(--brown-light);">No hay registros.</td></tr>`;
+    return;
+  }
+  $('catTbody').innerHTML = datos.map(item => `
+    <tr>
+      ${cfg.render(item)}
+      <td><div class="actions">
+        <button class="btn btn-dark btn-sm" onclick="App.abrirEditar(${item.id})">✏️ Editar</button>
+        <button class="btn btn-red  btn-sm" onclick="App.eliminarCat(${item.id})">🗑️</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+function filtrarCat() {
+  const q = $('catSearch').value.toLowerCase();
+  mostrarCat(catDatos.filter(i => i.nombre.toLowerCase().includes(q) || (i.tienda&&i.tienda.toLowerCase().includes(q))));
+}
+
+// ── MODAL AGREGAR ─────────────────────────────────────────────
+function abrirAgregar() {
+  modalModo = 'agregar';
+  modalItem = null;
+  $('modalTitle').textContent = `Agregar — ${catConfig[catActivo].titulo}`;
+  $('modalFields').innerHTML = catConfig[catActivo].campos();
+  $('modalBg').classList.add('open');
+}
+
+function abrirEditar(id) {
+  modalModo = 'editar';
+  modalItem = catDatos.find(i=>i.id==id);
+  if(!modalItem) return;
+  $('modalTitle').textContent = `Editar — ${catConfig[catActivo].titulo}`;
+  $('modalFields').innerHTML = catConfig[catActivo].campos();
+  $('modalBg').classList.add('open');
+}
+
+function cerrarModal() {
+  $('modalBg').classList.remove('open');
+  modalItem = null;
+}
+
+async function guardarModal() {
+  const cfg = catConfig[catActivo];
+  const payload = cfg.payload();
+  if(!payload.nombre) { toast('❌ El nombre es requerido','err'); return; }
+  try {
+    let res, data;
+    if(modalModo === 'agregar') {
+      res  = await fetch(`${API}/${catActivo}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      data = await res.json();
+      toast(`✅ ${data.mensaje||'Guardado'}`, 'ok');
+    } else {
+      res  = await fetch(`${API}/${catActivo}/${modalItem.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      data = await res.json();
+      toast(`✅ ${data.mensaje||'Actualizado'}`, 'ok');
+    }
+    cerrarModal();
+    await renderCat();
+    // Recargar en cotizador también
+    renderAll();
+  } catch(e) { toast('❌ Error al guardar','err'); }
+}
+
+async function eliminarCat(id) {
+  const item = catDatos.find(i=>i.id==id);
+  if(!confirm(`¿Eliminar "${item?.nombre}"?`)) return;
+  try {
+    await fetch(`${API}/${catActivo}/${id}`,{method:'DELETE'});
+    toast('🗑️ Eliminado correctamente','ok');
+    await renderCat();
+    renderAll();
+  } catch(e){ toast('❌ Error al eliminar','err'); }
+}
+
+// ── IMPRIMIR COTIZACIÓN ACTUAL ───────────────────────────────
+function imprimirActual() {
+  const tMat  = rowsMat.reduce((s,r)=>{const c=getPrecioInsumo(r.insumo_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const tTela = rowsTela.reduce((s,r)=>{const c=getPrecioTela(r.tela_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const tMad  = rowsMad.reduce((s,r)=>{const c=getPrecioMadera(r.madera_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const tEsp  = rowsEsp.reduce((s,r)=>{const c=getPrecioEspuma(r.espuma_id);return(c!=null&&r.cant)?s+c*r.cant:s;},0);
+  const cant=parseInt($('cantPiezas')?.value)||1;
+  const flete=parseFloat($('flete').value)||0;
+  const va=parseFloat($('valorAgregado').value)||0;
+  const mo=parseFloat($('manoObra').value)||0;
+  const pct=parseFloat($('pctGanancia').value)||30;
+  const sub2=(tMat+tTela+tMad+tEsp)*cant+flete+va+mo;
+  const total=(sub2*(1+pct/100)).toFixed(2);
+  const unitario=(sub2*(1+pct/100)/cant).toFixed(2);
+  const fecha=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  const cliId=$('clienteSelect').value;
+  const cli=DB.clientes.find(x=>x.id==cliId)||{};
+  const nombre=cli.nombre||$('nuevoCliente').value||'—';
+  const tel=cli.telefono||$('nuevoTel').value||'';
+  const dir=cli.direccion||$('nuevoDir').value||'';
+  const tipo=document.querySelector('#tipoMueble option:checked')?.textContent||'—';
+  const anticipoVal=(parseFloat($('anticipo')?.value)||0).toFixed(2);
+  const restoVal=Math.max(0,parseFloat(total)-parseFloat(anticipoVal)).toFixed(2);
+  abrirRemision({cliente:nombre,tel,dir,fecha,total,unitario,cant,tipo,id:'—',anticipo:anticipoVal,resto:restoVal});
+}
+
+function abrirRemision({cliente,tel,dir,fecha,total,unitario,cant,tipo,id,anticipo,resto}) {
+  cant=cant||1; unitario=unitario||total; anticipo=anticipo||'0.00'; resto=resto||total;
+  const win=window.open('','_blank','width=620,height=800');
+  win.document.write(`<!DOCTYPE html><html><head><title>Remisión ${id!='—'?'#'+id:''}</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial,sans-serif;background:#fff;color:#000;padding:20px 24px;font-size:12px;}
+    .top{display:flex;align-items:flex-start;justify-content:space-between;border-bottom:2px solid #000;padding-bottom:10px;margin-bottom:10px;}
+    .logo-area{display:flex;align-items:center;gap:10px;}
+    .logo-icon{font-size:2.2rem;}
+    .empresa-nombre{font-size:1.15rem;font-weight:900;letter-spacing:0.04em;line-height:1.1;}
+    .empresa-nombre small{display:block;font-size:0.65rem;font-weight:400;letter-spacing:0.02em;}
+    .empresa-datos{font-size:0.65rem;line-height:1.6;margin-top:4px;}
+    .folio-box{border:2px solid #000;padding:6px 14px;text-align:center;min-width:110px;}
+    .folio-box .remision-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;}
+    .folio-box .num{font-size:1.4rem;font-weight:900;color:#cc0000;}
+    .servicios{font-size:0.6rem;text-align:center;margin-top:6px;color:#333;border-top:1px solid #ccc;padding-top:4px;}
+    .campos{width:100%;border-collapse:collapse;margin-bottom:8px;}
+    .campos td{border:1px solid #000;padding:4px 7px;font-size:11px;}
+    .campos .lbl{background:#f0f0f0;font-weight:700;width:80px;}
+    table.items{width:100%;border-collapse:collapse;margin-bottom:10px;}
+    table.items th{background:#000;color:#fff;padding:5px 7px;font-size:11px;text-align:center;}
+    table.items td{border:1px solid #999;padding:5px 7px;font-size:11px;text-align:center;}
+    table.items td.desc{text-align:left;}
+    .empty-row td{height:22px;}
+    .totales{width:100%;border-collapse:collapse;}
+    .totales td{border:1px solid #000;padding:5px 10px;font-size:11px;}
+    .totales .lbl{background:#f0f0f0;font-weight:700;text-align:right;}
+    .totales .val{font-weight:700;text-align:right;min-width:90px;}
+    .firma{margin-top:24px;border-top:1px solid #000;padding-top:4px;font-size:10px;text-align:center;color:#555;}
+    .print-btn{display:block;margin:16px auto 0;padding:8px 24px;background:#000;color:#fff;border:none;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer;}
+    @media print{.print-btn{display:none;}body{padding:10px;}}
+  </style></head><body>
+  <div class="top">
+    <div>
+      <div class="logo-area">
+        <div class="logo-icon">🪑</div>
+        <div>
+          <div class="empresa-nombre">AUTOTAPICERIA MA &amp; VE<small>MARIA GENOVEVA GARCIA VARGAS</small></div>
+          <div class="empresa-datos">
+            RUIZ CORTINES No. 115 PTE. &nbsp;|&nbsp; COL. MITRAS NORTE MONTERREY, N.L. C.P. 64320<br>
+            TEL: 81 1104-2245 &nbsp;&nbsp; 81 3137-6085<br>
+            correo: tapizados.mave@gmail.com
+          </div>
+        </div>
+      </div>
+      <div class="servicios">MUEBLES DE OFICINA, SILLAS DE COMEDOR, DESCANSEY, SILLONES CARROS, CIELOS, ALFOMBRAS, ASIENTOS, TABLEROS-VINIL EXTERIOR</div>
+    </div>
+    <div>
+      <div class="folio-box">
+        <div class="remision-label">Remisión</div>
+        <div class="num">${id!='—'?String(id).padStart(4,'0'):''}</div>
+      </div>
+    </div>
+  </div>
+  <table class="campos">
+    <tr><td class="lbl">FECHA</td><td colspan="3">${fecha}</td></tr>
+    <tr><td class="lbl">CLIENTE</td><td colspan="3">${cliente}</td></tr>
+    <tr><td class="lbl">DIRECCIÓN</td><td colspan="3">${dir}</td></tr>
+    <tr><td class="lbl">CIUDAD</td><td>Monterrey, N.L.</td><td class="lbl">TEL</td><td>${tel}</td></tr>
+  </table>
+  <table class="items">
+    <thead><tr><th style="width:50px">CANT.</th><th>DESCRIPCIÓN</th><th style="width:90px">P. UNITARIO</th><th style="width:90px">IMPORTE</th></tr></thead>
+    <tbody>
+      <tr><td>${cant}</td><td class="desc">${tipo}</td><td>$${unitario}</td><td>$${total}</td></tr>
+      ${Array(8).fill('<tr class="empty-row"><td></td><td></td><td></td><td></td></tr>').join('')}
+    </tbody>
+  </table>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:16px;">
+    <tr><td style="border:1px solid #000;padding:4px 7px;font-size:10px;font-style:italic;color:#555;" colspan="4">CANTIDAD CON LETRA</td></tr>
+  </table>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+    <div class="firma">_______________________________<br>FIRMA DE CONFORMIDAD</div>
+    <table class="totales" style="width:220px;">
+      <tr><td class="lbl">PRESUPUESTO</td><td class="val">$${total}</td></tr>
+      <tr><td class="lbl">ANTICIPO</td><td class="val">${parseFloat(anticipo)>0?'$'+anticipo:'&nbsp;'}</td></tr>
+      <tr><td class="lbl">RESTO</td><td class="val">${parseFloat(anticipo)>0?'$'+resto:'&nbsp;'}</td></tr>
+    </table>
+  </div>
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  </body></html>`);
+}
+
+// ── OBJETO PÚBLICO ────────────────────────────────────────────
+const App = {
+  showTab, addRow, guardar, recalc, cargarHistorial, imprimirActual,
+  catMenu, abrirAgregar, abrirEditar, cerrarModal, guardarModal,
+  eliminarCat, filtrarCat
+};
+
+// ── INICIO ────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', cargarDatos);
+
+</script>
 </body>
 </html>
